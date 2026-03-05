@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">QRISScanner</string>
+
+    <string name="permissions_dialog_title">wondr perlu akses kamera</string>
+    <string name="permissions_dialog_content">Untuk bisa lanjut, kasih wondr izin akses ke kamera lewat pengaturan HP.</string>
+    <string name="permissions_dialog_pos_btn_text">Ke Pengaturan HP</string>
+    <string name="permissions_dialog_neg_btn_text">Tutup</string>
+
+    <string name="invalid_qr_dialog_title">Kode QR tidak terbaca</string>
+    <string name="invalid_qr_dialog_content">Pastiin kode QR terlihat jelas, valid, dan sesuai standar QRIS.</string>
+    <string name="invalid_qr_dialog_btn_text">Scan Ulang</string>
+
+    <string name="qr_history_title">Riwayat Transaksi</string>
 </resources>

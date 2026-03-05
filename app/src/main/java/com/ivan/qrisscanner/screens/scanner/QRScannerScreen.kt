@@ -1,11 +1,9 @@
 package com.ivan.qrisscanner.screens.scanner
 
 import android.Manifest
-import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.viewfinder.compose.MutableCoordinateTransformer
@@ -29,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -82,10 +81,10 @@ fun QRScannerScreen(
         QRScannerContent(activityNavController)
     } else {
         TwoStackedButtonDialog(
-            title = "This app needs access to your camera",
-            content = "To continue, allow this app the permission to access the camera.",
-            positiveBtnText = "To App Settings",
-            negativeBtnText = "Exit",
+            title = stringResource(com.ivan.qrisscanner.R.string.permissions_dialog_title),
+            content = stringResource(com.ivan.qrisscanner.R.string.permissions_dialog_content),
+            positiveBtnText = stringResource(com.ivan.qrisscanner.R.string.permissions_dialog_pos_btn_text),
+            negativeBtnText = stringResource(com.ivan.qrisscanner.R.string.permissions_dialog_neg_btn_text),
             onPositiveButtonClicked = {
                 onSignalOpenAppSettings()
             },
@@ -115,13 +114,9 @@ fun QRScannerContent(
     }
 
     val pickMedia =
-        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
+        rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
             if (uri != null) {
                 viewModel.scanImageUriWithBarcodeScanner(context, uri)
-            } else {
-                // Log.d("PhotoPicker", "No media selected")
             }
         }
 
@@ -144,7 +139,6 @@ fun QRScannerContent(
     }
 
     LaunchedEffect(lastTransactionSuccess) {
-        Log.d("qrscanner", "last transaction success ${lastTransactionSuccess}")
         when (lastTransactionSuccess) {
             DBInsertState.Idle, DBInsertState.Loading -> {}
             DBInsertState.Success -> {
@@ -211,9 +205,9 @@ fun QRScannerContent(
 
         if (displayFailureDialog.value) {
             SingleButtonDialog(
-                title = "Invalid QR Code",
-                content = "Make sure QR is proper",
-                btnText = "OK",
+                title = stringResource(com.ivan.qrisscanner.R.string.invalid_qr_dialog_title),
+                content = stringResource(com.ivan.qrisscanner.R.string.invalid_qr_dialog_content),
+                btnText = stringResource(com.ivan.qrisscanner.R.string.invalid_qr_dialog_btn_text),
                 onSingleButtonClicked = { displayFailureDialog.value = false },
                 onDismissRequest = { displayFailureDialog.value = false }
             )
