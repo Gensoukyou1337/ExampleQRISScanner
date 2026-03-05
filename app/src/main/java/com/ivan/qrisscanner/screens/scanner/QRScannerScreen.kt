@@ -1,7 +1,9 @@
 package com.ivan.qrisscanner.screens.scanner
 
 import android.Manifest
+import android.app.Activity
 import android.util.Log
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,8 +37,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.ivan.qrisscanner.Route
 import com.ivan.qrisscanner.enums.DBInsertState
 import com.ivan.qrisscanner.screens.common.dialogs.SingleButtonDialog
@@ -53,7 +57,9 @@ fun QRScannerScreen(
         Manifest.permission.CAMERA
     )
     val lifecycleOwner = LocalLifecycleOwner.current
+    val activity = LocalActivity.current
 
+    /*
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
@@ -68,11 +74,17 @@ fun QRScannerScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+    */
 
-    if (cameraPermissionState.status.isGranted) {
+    LaunchedEffect(true) {
+        if (!cameraPermissionState.status.isGranted) {
+            cameraPermissionState.launchPermissionRequest()
+        }
+    }
+
+    if (cameraPermissionState.status is PermissionStatus.Granted) {
         QRScannerContent(activityNavController)
     } else {
-        // ModalBottomSheet() { }
         TwoStackedButtonDialog(
             title = "This app needs access to your camera",
             content = "To continue, allow this app the permission to access the camera.",
@@ -82,11 +94,9 @@ fun QRScannerScreen(
                 onSignalOpenAppSettings()
             },
             onNegativeButtonClicked = {
-
+                activity?.finish()
             },
-            onDismissRequest = {
-
-            }
+            onDismissRequest = {}
         )
     }
 }

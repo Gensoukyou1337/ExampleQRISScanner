@@ -1,5 +1,6 @@
 package com.ivan.domain.repository
 
+import android.util.Log
 import com.ivan.data.room.datasource.TransactionsDataSource
 import com.ivan.data.room.transactions.parseAsTransactionEntity
 import com.ivan.domain.displayentity.TransactionDisplayableEntity
