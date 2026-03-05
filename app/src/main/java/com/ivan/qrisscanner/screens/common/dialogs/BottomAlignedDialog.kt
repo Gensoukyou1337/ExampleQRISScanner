@@ -59,7 +59,7 @@ fun TwoStackedButtonDialog(
                     top = 24.dp,
                     bottom = 24.dp
                 )
-            ){
+            ) {
                 Text(
                     text = title,
                     fontSize = 18.sp,
